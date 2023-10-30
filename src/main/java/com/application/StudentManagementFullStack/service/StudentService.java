@@ -1,4 +1,7 @@
 package com.application.StudentManagementFullStack.service;
 
-public class StudentService {
+import com.application.StudentManagementFullStack.entity.StudentEntity;
+
+public interface StudentService {
+    public StudentEntity saveStudent(StudentEntity studentEntity);
 }
