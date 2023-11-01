@@ -1,37 +1,42 @@
-import * as React from 'react';
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import HowToRegIcon from '@mui/icons-material/HowToReg';import Link from '@mui/material/Link';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit">
-        Adrian Popescu
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    const formData = new FormData(event.currentTarget);
+    const studentData = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      address: formData.get('address'),
+    };
+
+
+    fetch("http://localhost:8080/student/add", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(studentData)
+    })
+    .then(response => {
+      if (response.status === 200) {
+        alert('Studentul a fost înregistrat cu succes!');
+        // Puteți face și alte acțiuni după înregistrarea cu succes a studentului
+      } else {
+        alert('Eroare la înregistrarea studentului.');
+      }
     });
   };
 
@@ -58,31 +63,30 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="firstName"
               label="First Name"
-              name="email"
-              autoComplete="email"
+              name="firstName"
+              autoComplete="firstName"
               autoFocus
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="lastName"
               label="Last Name"
-              name="email"
-              autoComplete="email"
-              autoFocus
+              name="lastName"
+              autoComplete="lastName"
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
+              name="address"
               label="Address"
-              type="password"
-              id="password"
-              autoComplete="current-password"
+              type="text"
+              id="address"
+              autoComplete="address"
             />
             <Button
               type="submit"
@@ -94,7 +98,9 @@ export default function SignIn() {
             </Button>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Link href="#" variant="body2">
+          Go back to login
+        </Link>
       </Container>
     </ThemeProvider>
   );
